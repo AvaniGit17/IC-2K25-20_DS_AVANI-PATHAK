@@ -1,0 +1,105 @@
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int a[100], n, choice, pos, value;
+
+    cout << "Enter size: ";
+    cin >> n;
+
+    cout << "Enter elements: ";
+    for(int i = 0; i < n; i++)
+        cin >> a[i];
+
+    do {
+        cout << "\n1.Insert\n2.Delete\n3.Search\n";
+        cout << "4.Left Rotate\n5.Right Rotate\n6.Display\n0.Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch(choice) {
+
+        case 1:
+            cout << "Enter position (0-based): ";
+            cin >> pos;
+            cout << "Enter value: ";
+            cin >> value;
+
+            if(pos < 0 || pos > n || n == 100) {
+                cout << "Invalid position!\n";
+                break;
+            }
+
+            for(int i = n; i > pos; i--)
+                a[i] = a[i-1];
+
+            a[pos] = value;
+            n++;
+            break;
+
+        case 2:
+            cout << "Enter position: ";
+            cin >> pos;
+
+            if(pos < 0 || pos >= n) {
+                cout << "Invalid position!\n";
+                break;
+            }
+
+            for(int i = pos; i < n-1; i++)
+                a[i] = a[i+1];
+
+            n--;
+            break;
+
+        case 3:
+            cout << "Enter value: ";
+            cin >> value;
+
+            for(int i = 0; i < n; i++) {
+                if(a[i] == value) {
+                    cout << "Found at index " << i << endl;
+                    break;
+                }
+                if(i == n-1)
+                    cout << "Not found\n";
+            }
+            break;
+
+        case 4:
+            if(n > 1) {
+                int temp = a[0];
+                for(int i = 0; i < n-1; i++)
+                    a[i] = a[i+1];
+                a[n-1] = temp;
+            }
+            break;
+
+        case 5:
+            if(n > 1) {
+                int temp = a[n-1];
+                for(int i = n-1; i > 0; i--)
+                    a[i] = a[i-1];
+                a[0] = temp;
+            }
+            break;
+
+        case 6:
+            for(int i = 0; i < n; i++)
+                cout << a[i] << " ";
+            cout << endl;
+            break;
+
+        case 0:
+            cout << "Exit\n";
+            break;
+
+        default:
+            cout << "Invalid choice\n";
+        }
+
+    } while(choice != 0);
+
+    return 0;
+}
