@@ -1,0 +1,65 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    int a[10][10], t[101][3], tr[101][3];
+    int r, c, k = 1;
+
+    cout << "Enter rows and columns: ";
+    cin >> r >> c;
+
+    cout << "Enter matrix:\n";
+
+    for(int i = 0; i < r; i++) {
+        for(int j = 0; j < c; j++) {
+            cin >> a[i][j];
+
+            if(a[i][j] != 0) {
+                t[k][0] = i;
+                t[k][1] = j;
+                t[k][2] = a[i][j];
+                k++;
+            }
+        }
+    }
+
+    t[0][0] = r;
+    t[0][1] = c;
+    t[0][2] = k-1;
+
+    cout << "\nTriplet Matrix:\n";
+
+    for(int i = 0; i < k; i++) {
+        for(int j = 0; j < 3; j++)
+            cout << t[i][j] << " ";
+        cout << endl;
+    }
+
+    // Transpose
+    tr[0][0] = c;
+    tr[0][1] = r;
+    tr[0][2] = k-1;
+
+    int p = 1;
+
+    for(int col = 0; col < c; col++) {
+        for(int i = 1; i < k; i++) {
+            if(t[i][1] == col) {
+                tr[p][0] = t[i][1];
+                tr[p][1] = t[i][0];
+                tr[p][2] = t[i][2];
+                p++;
+            }
+        }
+    }
+
+    cout << "\nTranspose:\n";
+
+    for(int i = 0; i < p; i++) {
+        for(int j = 0; j < 3; j++)
+            cout << tr[i][j] << " ";
+        cout << endl;
+    }
+
+    return 0;
+}
