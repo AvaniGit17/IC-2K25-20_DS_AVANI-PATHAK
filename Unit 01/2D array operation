@@ -1,0 +1,149 @@
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int a[10][10], r, c, choice;
+
+    cout << "Enter rows and columns: ";
+    cin >> r >> c;
+
+    cout << "Enter matrix elements:\n";
+    for (int i = 0; i < r; i++) {
+        for (int j = 0; j < c; j++) {
+            cin >> a[i][j];
+        }
+    }
+
+    do {
+        cout << "\n--- 2D ARRAY OPERATIONS ---\n";
+        cout << "1. Insert Row\n";
+        cout << "2. Delete Row\n";
+        cout << "3. Search Element\n";
+        cout << "4. Rotate 90 Degrees Clockwise\n";
+        cout << "5. Display Matrix\n";
+        cout << "0. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+
+        case 1: {
+            int pos, temp[10];
+
+            if (r == 10) {
+                cout << "Maximum row limit reached!\n";
+                break;
+            }
+
+            cout << "Enter row position (0 to " << r << "): ";
+            cin >> pos;
+
+            if (pos < 0 || pos > r) {
+                cout << "Invalid position!\n";
+                break;
+            }
+
+            cout << "Enter " << c << " elements: ";
+            for (int j = 0; j < c; j++)
+                cin >> temp[j];
+
+            for (int i = r; i > pos; i--) {
+                for (int j = 0; j < c; j++)
+                    a[i][j] = a[i - 1][j];
+            }
+
+            for (int j = 0; j < c; j++)
+                a[pos][j] = temp[j];
+
+            r++;
+            cout << "Row inserted successfully.\n";
+            break;
+        }
+
+        case 2: {
+            int pos;
+
+            cout << "Enter row to delete: ";
+            cin >> pos;
+
+            if (pos < 0 || pos >= r) {
+                cout << "Invalid position!\n";
+                break;
+            }
+
+            for (int i = pos; i < r - 1; i++) {
+                for (int j = 0; j < c; j++)
+                    a[i][j] = a[i + 1][j];
+            }
+
+            r--;
+            cout << "Row deleted successfully.\n";
+            break;
+        }
+
+        case 3: {
+            int key, found = 0;
+
+            cout << "Enter element to search: ";
+            cin >> key;
+
+            for (int i = 0; i < r; i++) {
+                for (int j = 0; j < c; j++) {
+                    if (a[i][j] == key) {
+                        cout << "Found at position: "
+                             << i << ", " << j << endl;
+                        found = 1;
+                    }
+                }
+            }
+
+            if (!found)
+                cout << "Element not found.\n";
+
+            break;
+        }
+
+        case 4: {
+            if (r != c) {
+                cout << "Rotation requires a square matrix.\n";
+                break;
+            }
+
+            for (int i = 0; i < r; i++) {
+                for (int j = i + 1; j < c; j++) {
+                    swap(a[i][j], a[j][i]);
+                }
+            }
+
+            for (int i = 0; i < r; i++) {
+                for (int j = 0; j < c / 2; j++) {
+                    swap(a[i][j], a[i][c - 1 - j]);
+                }
+            }
+
+            cout << "Matrix rotated successfully.\n";
+            break;
+        }
+
+        case 5:
+            cout << "Matrix:\n";
+            for (int i = 0; i < r; i++) {
+                for (int j = 0; j < c; j++)
+                    cout << a[i][j] << " ";
+                cout << endl;
+            }
+            break;
+
+        case 0:
+            cout << "Program terminated.\n";
+            break;
+
+        default:
+            cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 0);
+
+    return 0;
+}
