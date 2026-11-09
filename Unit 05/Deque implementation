@@ -1,0 +1,90 @@
+
+#include <iostream>
+using namespace std;
+
+int q[5], front = -1, rear = -1;
+int n = 5;
+
+void insertFront(int x) {
+    if ((rear + 1) % n == front) {
+        cout << "Deque Full\n";
+        return;
+    }
+
+    if (front == -1)
+        front = rear = 0;
+    else
+        front = (front - 1 + n) % n;
+
+    q[front] = x;
+}
+
+void insertRear(int x) {
+    if ((rear + 1) % n == front) {
+        cout << "Deque Full\n";
+        return;
+    }
+
+    if (front == -1)
+        front = rear = 0;
+    else
+        rear = (rear + 1) % n;
+
+    q[rear] = x;
+}
+
+void deleteFront() {
+    if (front == -1) {
+        cout << "Deque Empty\n";
+        return;
+    }
+
+    cout << "Deleted: " << q[front] << endl;
+
+    if (front == rear)
+        front = rear = -1;
+    else
+        front = (front + 1) % n;
+}
+
+void deleteRear() {
+    if (front == -1) {
+        cout << "Deque Empty\n";
+        return;
+    }
+
+    cout << "Deleted: " << q[rear] << endl;
+
+    if (front == rear)
+        front = rear = -1;
+    else
+        rear = (rear - 1 + n) % n;
+}
+
+void display() {
+    if (front == -1) return;
+
+    int i = front;
+
+    while (true) {
+        cout << q[i] << " ";
+        if (i == rear) break;
+        i = (i + 1) % n;
+    }
+    cout << endl;
+}
+
+int main() {
+    insertRear(10);
+    insertRear(20);
+    insertFront(5);
+
+    display();
+
+    deleteFront();
+    deleteRear();
+
+    display();
+
+    return 0;
+}
