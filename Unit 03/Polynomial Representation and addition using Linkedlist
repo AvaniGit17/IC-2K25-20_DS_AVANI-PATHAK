@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int coeff, exp;
+    Node* next;
+};
+
+Node* create(int c, int e) {
+    Node* n = new Node;
+    n->coeff = c;
+    n->exp = e;
+    n->next = NULL;
+    return n;
+}
+
+void insert(Node*& head, int c, int e) {
+    Node* n = create(c, e);
+
+    if (!head) {
+        head = n;
+        return;
+    }
+
+    Node* temp = head;
+    while (temp->next)
+        temp = temp->next;
+
+    temp->next = n;
+}
+
+Node* add(Node* p1, Node* p2) {
+    Node* result = NULL;
+
+    while (p1 && p2) {
+        if (p1->exp == p2->exp) {
+            insert(result, p1->coeff + p2->coeff, p1->exp);
+            p1 = p1->next;
+            p2 = p2->next;
+        }
+        else if (p1->exp > p2->exp) {
+            insert(result, p1->coeff, p1->exp);
+            p1 = p1->next;
+        }
+        else {
+            insert(result, p2->coeff, p2->exp);
+            p2 = p2->next;
+        }
+    }
+
+    while (p1) {
+        insert(result, p1->coeff, p1->exp);
+        p1 = p1->next;
+    }
+
+    while (p2) {
+        insert(result, p2->coeff, p2->exp);
+        p2 = p2->next;
+    }
+
+    return result;
+}
+
+void display(Node* temp) {
+    while (temp) {
+        cout << temp->coeff << "x^" << temp->exp;
+
+        if (temp->next)
+            cout << " + ";
+
+        temp = temp->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    Node *p1 = NULL, *p2 = NULL;
+
+    insert(p1, 5, 2);
+    insert(p1, 4, 1);
+    insert(p1, 3, 0);
+
+    insert(p2, 3, 2);
+    insert(p2, 2, 1);
+    insert(p2, 1, 0);
+
+    cout << "First Polynomial: ";
+    display(p1);
+
+    cout << "Second Polynomial: ";
+    display(p2);
+
+    Node* result = add(p1, p2);
+
+    cout << "Addition: ";
+    display(result);
+
+    return 0;
+}
