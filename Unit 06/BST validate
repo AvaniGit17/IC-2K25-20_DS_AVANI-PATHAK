@@ -1,0 +1,33 @@
+
+#include <iostream>
+#include <climits>
+using namespace std;
+
+struct Node {
+    int data;
+    Node *left, *right;
+};
+
+bool validate(Node* root, int min, int max) {
+    if (!root) return true;
+
+    if (root->data <= min || root->data >= max)
+        return false;
+
+    return validate(root->left, min, root->data) &&
+           validate(root->right, root->data, max);
+}
+
+int main() {
+    Node* root = new Node{50, NULL, NULL};
+
+    root->left = new Node{30, NULL, NULL};
+    root->right = new Node{70, NULL, NULL};
+
+    if (validate(root, INT_MIN, INT_MAX))
+        cout << "Valid BST";
+    else
+        cout << "Invalid BST";
+
+    return 0;
+}
