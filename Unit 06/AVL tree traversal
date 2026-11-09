@@ -1,0 +1,107 @@
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data, height;
+    Node *left, *right;
+};
+
+int height(Node* n) {
+    return n ? n->height : 0;
+}
+
+Node* create(int x) {
+    return new Node{x, 1, NULL, NULL};
+}
+
+int balance(Node* n) {
+    return n ? height(n->left) - height(n->right) : 0;
+}
+
+Node* rightRotate(Node* y) {
+    Node* x = y->left;
+    Node* t = x->right;
+
+    x->right = y;
+    y->left = t;
+
+    y->height = 1 + max(height(y->left), height(y->right));
+    x->height = 1 + max(height(x->left), height(x->right));
+
+    return x;
+}
+
+Node* leftRotate(Node* x) {
+    Node* y = x->right;
+    Node* t = y->left;
+
+    y->left = x;
+    x->right = t;
+
+    x->height = 1 + max(height(x->left), height(x->right));
+    y->height = 1 + max(height(y->left), height(y->right));
+
+    return y;
+}
+
+Node* insert(Node* root, int x) {
+    if (!root) return create(x);
+
+    if (x < root->data)
+        root->left = insert(root->left, x);
+    else if (x > root->data)
+        root->right = insert(root->right, x);
+    else
+        return root;
+
+    root->height = 1 + max(height(root->left),
+                           height(root->right));
+
+    int b = balance(root);
+
+    // LL
+    if (b > 1 && x < root->left->data)
+        return rightRotate(root);
+
+    // RR
+    if (b < -1 && x > root->right->data)
+        return leftRotate(root);
+
+    // LR
+    if (b > 1 && x > root->left->data) {
+        root->left = leftRotate(root->left);
+        return rightRotate(root);
+    }
+
+    // RL
+    if (b < -1 && x < root->right->data) {
+        root->right = rightRotate(root->right);
+        return leftRotate(root);
+    }
+
+    return root;
+}
+
+void inorder(Node* root) {
+    if (!root) return;
+
+    inorder(root->left);
+    cout << root->data << " ";
+    inorder(root->right);
+}
+
+int main() {
+    Node* root = NULL;
+
+    root = insert(root, 30);
+    root = insert(root, 20);
+    root = insert(root, 10);
+    root = insert(root, 40);
+    root = insert(root, 50);
+
+    cout << "AVL Tree: ";
+    inorder(root);
+
+    return 0;
+}
