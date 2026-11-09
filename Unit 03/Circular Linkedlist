@@ -1,0 +1,156 @@
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* head = NULL;
+
+void insert(int x, int pos) {
+    Node* n = new Node{x, NULL};
+
+    if (!head) {
+        head = n;
+        n->next = head;
+        return;
+    }
+
+    if (pos == 1) {
+        Node* temp = head;
+        while (temp->next != head)
+            temp = temp->next;
+
+        n->next = head;
+        temp->next = n;
+        head = n;
+        return;
+    }
+
+    Node* temp = head;
+
+    for (int i = 1; i < pos - 1 && temp->next != head; i++)
+        temp = temp->next;
+
+    n->next = temp->next;
+    temp->next = n;
+}
+
+void deleteNode(int pos) {
+    if (!head) return;
+
+    Node* temp = head;
+
+    if (pos == 1) {
+        if (head->next == head) {
+            delete head;
+            head = NULL;
+            return;
+        }
+
+        while (temp->next != head)
+            temp = temp->next;
+
+        Node* del = head;
+        head = head->next;
+        temp->next = head;
+        delete del;
+        return;
+    }
+
+    for (int i = 1; i < pos - 1 && temp->next != head; i++)
+        temp = temp->next;
+
+    if (temp->next == head) return;
+
+    Node* del = temp->next;
+    temp->next = del->next;
+    delete del;
+}
+
+void reverse() {
+    if (!head || head->next == head) return;
+
+    Node *prev = NULL, *curr = head, *next;
+    Node* last = head;
+
+    while (last->next != head)
+        last = last->next;
+
+    do {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    } while (curr != head);
+
+    head->next = prev;
+    head = prev;
+    last->next = head;
+}
+
+void display() {
+    if (!head) return;
+
+    Node* temp = head;
+
+    do {
+        cout << temp->data << " -> ";
+        temp = temp->next;
+    } while (temp != head);
+
+    cout << "(Back to Head)\n";
+}
+
+void concatenate(Node* second) {
+    if (!second) return;
+
+    if (!head) {
+        head = second;
+        return;
+    }
+
+    Node* firstLast = head;
+    while (firstLast->next != head)
+        firstLast = firstLast->next;
+
+    Node* secondLast = second;
+    while (secondLast->next != second)
+        secondLast = secondLast->next;
+
+    firstLast->next = second;
+    secondLast->next = head;
+}
+
+int main() {
+    insert(10, 1);
+    insert(20, 2);
+    insert(30, 3);
+
+    cout << "Original: ";
+    display();
+
+    insert(15, 2);
+    cout << "After Insert: ";
+    display();
+
+    deleteNode(2);
+    cout << "After Delete: ";
+    display();
+
+    reverse();
+    cout << "After Reverse: ";
+    display();
+
+    Node* second = new Node{40, NULL};
+    second->next = second;
+
+    concatenate(second);
+
+    cout << "After Concatenate: ";
+    display();
+
+    return 0;
+}
